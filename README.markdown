@@ -5,6 +5,18 @@ A [project](http://github.com/cpesch/CarCosts) to track all the costs that my
 cars and/or motor bikes generate. It helps me to maintain an overview of the
 costs and it might help you.
 
+You have to be somewhat disciplined to enter the costs into the program:
+
+* all fuel costs
+* all maintenance costs 
+
+But if you do that, CarCosts calculates
+
+* total and average fuel consumption,
+* total and average mileage per year,
+* average fuel price and
+* cost per kilometer based on fuel costs, maintenance costs and overall costs. 
+
 FAQ
 ---
 

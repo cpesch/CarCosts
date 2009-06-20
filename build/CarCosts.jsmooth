@@ -11,11 +11,11 @@
 <executableName>output\CarCosts.exe</executableName>
 <iconLocation>..\car-costs\src\resources\slash\carcosts\images\CarCosts.png</iconLocation>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>output\standalone\MP3Tidy.jar</jarLocation>
-<mainClassName>slash.metamusic.mp3.gui.MP3TidyGUI</mainClassName>
+<jarLocation>output\CarCosts.jar</jarLocation>
+<mainClassName>slash.carcosts.CarCosts</mainClassName>
 <maximumMemoryHeap>67108864</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
-<minimumVersion>1.6</minimumVersion>
+<minimumVersion>1.5</minimumVersion>
 <skeletonName>Autodownload Wrapper</skeletonName>
 <skeletonProperties>
 <key>Message</key>

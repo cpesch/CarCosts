@@ -7,6 +7,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
   </component>
@@ -255,7 +256,7 @@
   </component>
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectKey">
-    <option name="state" value="project://C:\p4\CarCosts\build\carcosts.ipr" />
+    <option name="state" value="project://C:\p4\CarCosts\build\CarCosts.ipr" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
