@@ -1,0 +1,47 @@
+<project name="carcosts" default="compile" basedir="..">
+
+  <!-- Initializes properties -->
+  <target name="init">
+    <property file="build.properties"/>
+    <property name="build.output.dir" location="build/output"/>
+    <property name="carcosts.output" location="car-costs/output"/>
+    <property name="carcosts.output.classes" location="${carcosts.output}/classes"/>
+    <property name="carcosts.output.testclasses" location="${carcosts.output}/testclasses"/>
+    <path id="carcosts.classpath">
+      <path location="${carcosts.output.classes}"/>
+    </path>
+  </target>
+
+  <!-- Compiles all java classes -->
+  <target name="compile" depends="init">
+    <mkdir dir="${carcosts.output.classes}"/>
+    <javac destdir="${carcosts.output.classes}" debug="on">
+      <src location="car-costs/src/java"/>
+      <classpath refid="carcosts.classpath"/>
+    </javac>
+    <copy todir="${carcosts.output.classes}">
+      <fileset dir="car-costs/src/resources">
+     	  <include name="**/*.gif"/>
+     	  <include name="**/*.properties"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Jars all classes and resources -->
+  <target name="jar" depends="init,compile">
+    <mkdir dir="${build.output.dir}"/>
+    <jar destfile="${build.output.dir}/CarCosts.jar">
+      <fileset dir="${carcosts.output.classes}"/>
+      <manifest>
+	       <attribute name="Main-Class" value="slash.carcosts.CarCosts"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- Cleans up any temporary stuff -->
+  <target name="clean" depends="init">
+    <delete dir="${carcosts.output.classes}"/>
+    <delete dir="${carcosts.output.testclasses}"/>
+    <delete dir="${build.output.dir}"/>
+  </target>
+</project>

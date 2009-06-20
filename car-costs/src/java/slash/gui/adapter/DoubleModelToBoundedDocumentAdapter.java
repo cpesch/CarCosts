@@ -1,0 +1,174 @@
+package slash.gui.adapter;
+
+import slash.gui.model.DoubleModel;
+
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.logging.Logger;
+
+/**
+ * A bounded plain document that limits the size of the document and
+ * adapts an DoubleModel to a BoundedDocument or visa versa.
+ *
+ * @see slash.gui.model.BoundedDocument
+ * @see BidirectionalAdapter
+ */
+
+public class DoubleModelToBoundedDocumentAdapter extends PlainDocument
+        implements BidirectionalAdapter {
+
+    private static Logger log = Logger.getLogger(DoubleModelToBoundedDocumentAdapter.class.getName());
+
+    /**
+     * Constructs a bounded Double text document.
+     */
+    public DoubleModelToBoundedDocumentAdapter(DoubleModel model,
+                                               DecimalFormat format) {
+        this.delegate = model;
+        this.numberFormat = format;
+
+        updateAdapterFromDelegate();
+    }
+
+    // --- helper methods ----------------------------------------
+
+    /**
+     * Tries to parse the given String and convert it to a double.
+     */
+    private double parseNumber(String numberString) throws ParseException {
+        // check with the DecimalFormat
+        double number = numberFormat.parse(numberString).doubleValue();
+
+        // ## TBD this stupid DecimalFormat doesn't prevent inputs, that
+        // exceed the size of the format string
+        return number;
+    }
+
+    /**
+     * Test if the given alphanumerical number string is a valid number string.
+     * If so, update the delegate model with the new number.
+     */
+    private boolean isValidNumberString(String numberString) {
+        // check with the DecimalFormat
+        try {
+            parseNumber(numberString);
+        } catch (ParseException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update the delegate after changes of the adapter.
+     * This is the normal use, when the adapter is for
+     * editing the delegate's content.
+     */
+    public void updateDelegateFromAdapter() {
+        try {
+            // read textfield
+            String content = getText(0, getLength());
+
+            // convert string into Double, set delegate
+            if (content.length() > 0)
+                delegate.setValue(numberFormat.parse(content).doubleValue());
+            else
+                delegate.setValue(0.0);
+        } catch (Exception e) {
+            log.severe("error updating delegate: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Update the adapter after changes of the delegate.
+     * This is for inverse use, when the adapter displays
+     * the delegate's content.
+     */
+    public void updateAdapterFromDelegate() {
+        try {
+            // remove old content
+            super.remove(0, getLength());
+
+            // convert double to string, insert into text field
+            if (delegate.getValue() != 0.0) {
+                String numberString = numberFormat.format(delegate.getValue());
+                super.insertString(0, numberString, null);
+            }
+        } catch (BadLocationException e) {
+            log.severe("error updating adapter: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Removes a portion of the content of the document.  This
+     * will cause notification to be sent to the observers of
+     * the document (unless an exception is thrown).
+     *
+     * @param offs the offset from the begining
+     * @param len  the number of characters to remove
+     * @throws BadLocationException some portion of the removal range
+     *                              was not a valid part of the document.  The location in the exception
+     *                              is the first bad position encountered.
+     * @see DocumentEvent
+     * @see DocumentListener
+     */
+    public void remove(int offs, int len) throws BadLocationException {
+        // create a buffer with a simulated delete
+        String content = getText(0, getLength());
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(content.substring(0, offs));
+        buffer.append(content.substring(offs + len, content.length()));
+
+        // System.out.println("Remove:"+buffer.toString());
+
+        // test if buffer would be valid
+        if (isValidNumberString(buffer.toString())) {
+            super.remove(offs, len);
+            updateDelegateFromAdapter();
+        } else
+            throw new BadLocationException("Bad number:", offs);
+    }
+
+
+    /**
+     * Updates document structure as a result of text insertion. If the maximum
+     * size of the document is reached, an BadLocationException is thrown.
+     *
+     * @param a the set of attributes
+     * @throws BadLocationException the given insert position is not a valid
+     *                              position within the document
+     */
+    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+        char separator = numberFormat.getDecimalFormatSymbols().getDecimalSeparator();
+
+        // check of numbers
+        if ((str.charAt(0) != separator) && (validValues.indexOf(str) == -1))
+            throw new BadLocationException("No number at offset: ", offs);
+
+        // create a buffer with a simulated insert
+        StringBuffer buffer = new StringBuffer(getText(0, getLength()));
+        buffer.insert(offs, str);
+
+        // System.out.println("Insert:"+buffer.toString());
+
+        // test if buffer would be valid
+        if (isValidNumberString(buffer.toString())) {
+
+            // do the insert
+            super.insertString(offs, str, a);
+            updateDelegateFromAdapter();
+        } else
+            throw new BadLocationException("Bad number: ", offs);
+    }
+
+    // --- member variables ------------------------------------
+
+    private DoubleModel delegate;
+    private DecimalFormat numberFormat;
+    private static final String validValues = "0123456789";
+}
