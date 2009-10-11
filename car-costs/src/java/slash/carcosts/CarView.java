@@ -9,6 +9,7 @@
 package slash.carcosts;
 
 import slash.gui.GridBagHelper;
+import slash.gui.chooser.Constants;
 import slash.gui.adapter.*;
 import slash.gui.model.*;
 import slash.gui.toolkit.*;
@@ -640,7 +641,7 @@ public class CarView extends ManagedJPanel {
          * @param e the action event
          */
         public void actionPerformed(ActionEvent e) {
-            JFileChooser c = new JFileChooser();
+            JFileChooser c = Constants.createJFileChooser();
             CarFilter carFilter = new CarFilter();
             c.addChoosableFileFilter(carFilter);
             c.setFileFilter(carFilter);
@@ -670,7 +671,7 @@ public class CarView extends ManagedJPanel {
     }
 
     private File getFile() {
-        JFileChooser c = new JFileChooser();
+        JFileChooser c = Constants.createJFileChooser();
         CarFilter carFilter = new CarFilter();
         c.addChoosableFileFilter(carFilter);
         c.setFileFilter(carFilter);
