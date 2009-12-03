@@ -29,8 +29,8 @@ public class ActionManager {
      * Create a new ActionManager.
      */
     public ActionManager() {
-        commands = new HashMap();
-        listeners = new ArrayList();
+        commands = new HashMap<String, Action>();
+        listeners = new ArrayList<BooleanModelActionAdaptor>();
         cascade = null;
     }
 
@@ -50,12 +50,12 @@ public class ActionManager {
 
     /**
      * If the action manager is cascaded, then remove the cascade,
-     * the listeners and the Hashtable.
+     * the listeners and the hash table.
      */
     public void detach() {
         // System.out.println("Detaching "+listeners.size()+" listeners from Action Manager");
 
-        for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+        for (Iterator<BooleanModelActionAdaptor> iterator = listeners.iterator(); iterator.hasNext();) {
             Detachable detachable = (Detachable) iterator.next();
             detachable.detach();
         }
@@ -63,7 +63,7 @@ public class ActionManager {
         // remove all listeners
         listeners.clear();
 
-        // remove commands from Hashtable
+        // remove commands from hash table
         commands.clear();
 
         // null out references
@@ -114,7 +114,7 @@ public class ActionManager {
      * @param action the Action
      */
     public void addAction(Action action) {
-        commands.put(action.getValue(Action.NAME), action);
+        commands.put(action.getValue(Action.NAME).toString(), action);
         // System.out.println("Adding action "+action.getValue(Action.NAME)+
         // " from "+action);
     }
@@ -200,9 +200,9 @@ public class ActionManager {
 
     // --- member variables ------------------------------------
 
-    private Map commands;
+    private Map<String, Action> commands;
     private ActionManager cascade;
-    private List listeners;
+    private List<BooleanModelActionAdaptor> listeners;
 
     // must be static as there is only one action manager
     private static Action defaultAction = null;
