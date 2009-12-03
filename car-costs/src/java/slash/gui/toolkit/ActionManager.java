@@ -30,7 +30,7 @@ public class ActionManager {
      */
     public ActionManager() {
         commands = new HashMap<String, Action>();
-        listeners = new ArrayList<BooleanModelActionAdaptor>();
+        listeners = new ArrayList<Detachable>();
         cascade = null;
     }
 
@@ -55,8 +55,8 @@ public class ActionManager {
     public void detach() {
         // System.out.println("Detaching "+listeners.size()+" listeners from Action Manager");
 
-        for (Iterator<BooleanModelActionAdaptor> iterator = listeners.iterator(); iterator.hasNext();) {
-            Detachable detachable = (Detachable) iterator.next();
+        for (Iterator<Detachable> iterator = listeners.iterator(); iterator.hasNext();) {
+            Detachable detachable = iterator.next();
             detachable.detach();
         }
 
@@ -202,7 +202,7 @@ public class ActionManager {
 
     private Map<String, Action> commands;
     private ActionManager cascade;
-    private List<BooleanModelActionAdaptor> listeners;
+    private List<Detachable> listeners;
 
     // must be static as there is only one action manager
     private static Action defaultAction = null;
