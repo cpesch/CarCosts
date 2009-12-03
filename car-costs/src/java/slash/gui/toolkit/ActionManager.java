@@ -121,7 +121,7 @@ public class ActionManager {
 
     /**
      * Add an array of Actions to the list of Actions maintained by the
-     * ActionManager.  The Command-String ist the name of the Action.
+     * ActionManager.  The Command-String is the name of the Action.
      *
      * @param actions Array of actions
      */
