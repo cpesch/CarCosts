@@ -14,7 +14,7 @@
 
     <target name="compile" depends="init">
         <mkdir dir="${carcosts.output.classes}"/>
-        <javac destdir="${carcosts.output.classes}" debug="on">
+        <javac destdir="${carcosts.output.classes}" debug="on" includeantruntime="false">
             <src location="car-costs/src/java"/>
             <classpath refid="carcosts.classpath"/>
         </javac>
