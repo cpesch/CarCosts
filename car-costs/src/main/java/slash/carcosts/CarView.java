@@ -9,7 +9,6 @@
 package slash.carcosts;
 
 import slash.gui.GridBagHelper;
-import slash.gui.chooser.Constants;
 import slash.gui.adapter.*;
 import slash.gui.model.*;
 import slash.gui.toolkit.*;
@@ -25,6 +24,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.prefs.Preferences;
+
+import static javax.swing.JFileChooser.APPROVE_OPTION;
+import static javax.swing.JFileChooser.FILES_ONLY;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static slash.gui.chooser.Constants.createJFileChooser;
 
 /**
  * This is a view of a car.
@@ -33,6 +38,8 @@ import java.util.Locale;
  */
 
 public class CarView extends ManagedJPanel {
+    private static final Preferences preferences = Preferences.userNodeForPackage(CarView.class);
+    private static final String LAST_DIRECTORY_PREFERENCE = "preferred-directory";
 
     public CarView() {
         super();
@@ -91,8 +98,7 @@ public class CarView extends ManagedJPanel {
                     new EditMaintenanceCostsAction(),
                     new LoadCarAction(),
                     new SaveAsCarAction(),
-                    new SaveCarAction(),
-                    new EvaluateTimeRangeAction()
+                    new SaveCarAction()
             };
         }
         return actions;
@@ -621,6 +627,22 @@ public class CarView extends ManagedJPanel {
         }
     }
 
+    private static File findExistingPath(File path) {
+        while (path != null && !path.exists()) {
+            path = path.getParentFile();
+        }
+        return path != null && path.exists() ? path : null;
+    }
+
+    public File getLastDirectoryPreference() {
+        File path = new File(preferences.get(LAST_DIRECTORY_PREFERENCE, ""));
+        return findExistingPath(path);
+    }
+
+    public void setLastDirectoryPreference(File path) {
+        preferences.put(LAST_DIRECTORY_PREFERENCE, path.getPath());
+    }
+
     // --- Inner classes for actions --------------------------------
 
     /**
@@ -641,19 +663,20 @@ public class CarView extends ManagedJPanel {
          * @param e the action event
          */
         public void actionPerformed(ActionEvent e) {
-            JFileChooser c = Constants.createJFileChooser();
+            JFileChooser c = createJFileChooser();
             CarFilter carFilter = new CarFilter();
             c.addChoosableFileFilter(carFilter);
             c.setFileFilter(carFilter);
-            c.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            c.setFileSelectionMode(FILES_ONLY);
             c.setDialogTitle(CarCosts.getBundle().getString("load-car-title"));
             if (file == null)
-                c.setCurrentDirectory(new File(CarCosts.getBundle().getString("car-load-path")));
+                c.setCurrentDirectory(getLastDirectoryPreference());
             else
                 c.setCurrentDirectory(file);
 
-            if (c.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            if (c.showOpenDialog(null) == APPROVE_OPTION) {
                 File file = c.getSelectedFile();
+                setLastDirectoryPreference(file);
 
                 try {
                     Car car = new Car(file);
@@ -664,26 +687,28 @@ public class CarView extends ManagedJPanel {
                     JOptionPane.showMessageDialog(null, Util.formatString(CarCosts.getBundle().getString("load-car-failed"),
                             new Object[]{file.getName(), ie}),
                             CarCosts.getBundle().getString("carcosts-title"),
-                            JOptionPane.ERROR_MESSAGE);
+                            ERROR_MESSAGE);
                 }
             }
         }
     }
 
     private File getFile() {
-        JFileChooser c = Constants.createJFileChooser();
+        JFileChooser c = createJFileChooser();
         CarFilter carFilter = new CarFilter();
         c.addChoosableFileFilter(carFilter);
         c.setFileFilter(carFilter);
-        c.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        c.setFileSelectionMode(FILES_ONLY);
         c.setDialogTitle(CarCosts.getBundle().getString("save-car-title"));
         if (file == null)
-            c.setCurrentDirectory(new File(CarCosts.getBundle().getString("car-load-path")));
+            c.setCurrentDirectory(getLastDirectoryPreference());
         else
             c.setCurrentDirectory(file);
 
-        if (c.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+        if (c.showSaveDialog(null) == APPROVE_OPTION) {
             File file = c.getSelectedFile();
+            setLastDirectoryPreference(file);
+
             String extension = Files.getExtension(file);
             if (!extension.equalsIgnoreCase(CarCosts.getBundle().getString("car-filter-extension"))) {
                 file = new File(file.getParent(), file.getName() + "." + CarCosts.getBundle().getString("car-filter-extension"));
@@ -737,7 +762,7 @@ public class CarView extends ManagedJPanel {
             JOptionPane.showMessageDialog(null, Util.formatString(CarCosts.getBundle().getString("save-car-failed"),
                     new Object[]{file.getName(), e}),
                     CarCosts.getBundle().getString("carcosts-title"),
-                    JOptionPane.ERROR_MESSAGE);
+                    ERROR_MESSAGE);
         }
     }
 
@@ -891,28 +916,6 @@ public class CarView extends ManagedJPanel {
             frame.getContentPane().add("Center", view);
             frame.setSize(640, 450);
             frame.setVisible(true);
-        }
-    }
-
-    /**
-     * An action, which evaluates the time range given.
-     */
-    public class EvaluateTimeRangeAction extends AbstractAction {
-
-        /**
-         * Construct a new action.
-         */
-        public EvaluateTimeRangeAction() {
-            super("evaluate-time-range");
-        }
-
-        /**
-         * Process the event.
-         *
-         * @param e the action event
-         */
-        public void actionPerformed(ActionEvent e) {
-            // TODO wirklich noetig?
         }
     }
 
