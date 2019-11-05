@@ -30,7 +30,7 @@ public class Currency {
             Preferences preferences = Preferences.userNodeForPackage(Currency.class);
             addCurrency(new Currency("DM", "Pf.", 1.95583));
             addCurrency(new Currency("EUR", "Ct.", 1.0));
-            addCurrency(new Currency("SEK", "Öre", preferences.getDouble("1-SEK-to-1-EUR", 0.0986476)));
+            addCurrency(new Currency("SEK", "Ã–re", preferences.getDouble("1-SEK-to-1-EUR", 0.0986476)));
         }
     }
 
