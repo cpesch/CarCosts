@@ -172,7 +172,7 @@ public class CarCosts {
 
         frame.setIconImage(CarCosts.getBundle().getIcon("car-image").getImage());
         frame.getContentPane().add("Center", view);
-        frame.setSize(500, 370);
+        frame.setSize(600, 400);
         frame.setVisible(true);
 
         return view;
