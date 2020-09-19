@@ -29,7 +29,7 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
     }
 
     public Object getElementAt(int index) {
-        return maintenances.get(index);
+        return maintenances.get(Math.min(index, maintenances.size() - 1));
     }
 
     // --- additional methods ----------------------------------------
@@ -136,7 +136,7 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
 
     //-- storage support ------------------------------------------------
 
-    private static final String[] months = {"Jan", "Feb", "Mär", "Apr", "Mai", "Jun",
+    private static final String[] months = {"Jan", "Feb", "Mï¿½r", "Apr", "Mai", "Jun",
             "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"};
 
     private Calendar parseDate(String dateString) throws NoSuchElementException {
@@ -222,7 +222,7 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
                     addMaintenance(maintenance);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IOException("Ungültige Wartung.");
+                throw new IOException("Ungï¿½ltige Wartung.");
             }
         }
 

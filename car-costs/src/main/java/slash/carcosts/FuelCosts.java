@@ -29,7 +29,7 @@ public class FuelCosts extends AbstractListModel implements ListModel {
     }
 
     public Object getElementAt(int index) {
-        return fillings.get(index);
+        return fillings.get(Math.min(index, fillings.size() - 1));
     }
 
     // --- additional methods ----------------------------------------
@@ -152,7 +152,7 @@ public class FuelCosts extends AbstractListModel implements ListModel {
 
     //-- storage support ------------------------------------------------
 
-    private static final String[] months = {"Jan", "Feb", "Mär", "Apr", "Mai", "Jun",
+    private static final String[] months = {"Jan", "Feb", "Mï¿½r", "Apr", "Mai", "Jun",
             "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"};
 
     private Calendar parseDate(String dateString) throws NoSuchElementException {
@@ -233,7 +233,7 @@ public class FuelCosts extends AbstractListModel implements ListModel {
                 addFilling(filling);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IOException("Ungültige Tankung.");
+                throw new IOException("Ungï¿½ltige Tankung.");
             }
         }
 
