@@ -413,7 +413,7 @@ public class Car {
 
     public class ModelUpdater implements ListDataListener, ChangeListener {
         public void contentsChanged(ListDataEvent e) {
-            updateModels();
+           // intentionally left empty to avoid "changed" state just by opening a view
         }
 
         public void intervalAdded(ListDataEvent e) {
