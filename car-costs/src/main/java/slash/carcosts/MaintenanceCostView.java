@@ -19,6 +19,7 @@ import slash.gui.toolkit.RegistredJFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 /**
  * This is a view of the maintenance costs.
@@ -64,7 +65,7 @@ public class MaintenanceCostView extends ManagedJPanel {
 
         JViewport port = scroller.getViewport();
 
-        maintenanceList = new JList();
+        maintenanceList = new JList<>();
         maintenanceList.setModel(new SortingListModel(car.getMaintenanceCosts(), new MaintenanceComparator()));
         maintenanceList.setCellRenderer(new MaintenanceListRenderer());
         port.add(maintenanceList);
@@ -277,9 +278,8 @@ public class MaintenanceCostView extends ManagedJPanel {
          * @param ae the action event
          */
         public void actionPerformed(ActionEvent ae) {
-            Object[] selectedValues = maintenanceList.getSelectedValues();
-            for (Object selectedValue : selectedValues) {
-                Maintenance maintenance = (Maintenance) selectedValue;
+            List<Maintenance> selectedValues = maintenanceList.getSelectedValuesList();
+            for (Maintenance maintenance : selectedValues) {
                 car.getMaintenanceCosts().removeMaintenance(maintenance);
             }
         }
@@ -308,7 +308,7 @@ public class MaintenanceCostView extends ManagedJPanel {
 
     private RegistredJFrame frame;
     private JMenuBar menuBar;
-    private JList maintenanceList;
+    private JList<Maintenance> maintenanceList;
 
     private ListenerManager listenerMgr;
     private Action[] actions = null;

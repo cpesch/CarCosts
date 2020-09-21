@@ -16,8 +16,15 @@ import java.awt.*;
  *
  * @author Christian Pesch
  */
-public class MaintenanceListRenderer implements ListCellRenderer {
+public class MaintenanceListRenderer implements ListCellRenderer<Maintenance> {
     private static final int MAXIMUM_LABEL_LENGTH = 18;
+
+    private JPanel panel;
+    private JLabel label1;
+    private JLabel label2;
+    private JLabel label3;
+    private JLabel label4;
+    private JLabel label5;
 
     /**
      * Initialize.
@@ -48,12 +55,10 @@ public class MaintenanceListRenderer implements ListCellRenderer {
      * Render one entry.
      */
     public Component getListCellRendererComponent(JList list,
-                                                  Object value,
+                                                  Maintenance maintenance,
                                                   int index,
                                                   boolean isSelected,
                                                   boolean cellHasFocus) {
-        Maintenance maintenance = (Maintenance) value;
-
         label1.setText(RendererHelper.formatDate(maintenance.getDate()));
         label2.setText(maintenance.getMileage() + " " +
                 CarCosts.getBundle().getString("maintenancecost-mileage-unit-label") +
@@ -73,12 +78,4 @@ public class MaintenanceListRenderer implements ListCellRenderer {
 
         return panel;
     }
-
-    private JPanel panel;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
-    private JLabel label5;
-
 }

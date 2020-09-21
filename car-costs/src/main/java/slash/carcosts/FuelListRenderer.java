@@ -16,7 +16,16 @@ import java.awt.*;
  *
  * @author Christian Pesch
  */
-public class FuelListRenderer implements ListCellRenderer {
+public class FuelListRenderer implements ListCellRenderer<Filling> {
+    private Car car;
+    private JPanel panel;
+    private JLabel label1;
+    private JLabel label2;
+    private JLabel label3;
+    private JLabel label4;
+    private JLabel label5;
+    private JLabel label6;
+    private JLabel label7;
 
     /**
      * Initialize.
@@ -74,12 +83,10 @@ public class FuelListRenderer implements ListCellRenderer {
      * Render one entry.
      */
     public Component getListCellRendererComponent(JList list,
-                                                  Object value,
+                                                  Filling filling,
                                                   int index,
                                                   boolean isSelected,
                                                   boolean cellHasFocus) {
-        Filling filling = (Filling) value;
-
         label1.setText(RendererHelper.formatDate(filling.getDate()));
         label2.setText(filling.getMileage() + " " +
                 CarCosts.getBundle().getString("fuelcost-mileage-unit-label"));
@@ -110,14 +117,4 @@ public class FuelListRenderer implements ListCellRenderer {
 
         return panel;
     }
-
-    private Car car;
-    private JPanel panel;
-    private JLabel label1;
-    private JLabel label2;
-    private JLabel label3;
-    private JLabel label4;
-    private JLabel label5;
-    private JLabel label6;
-    private JLabel label7;
 }
