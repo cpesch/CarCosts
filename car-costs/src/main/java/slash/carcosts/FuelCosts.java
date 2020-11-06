@@ -10,7 +10,6 @@ package slash.carcosts;
 
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;

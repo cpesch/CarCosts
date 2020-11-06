@@ -10,7 +10,6 @@ package slash.carcosts;
 
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -223,7 +222,7 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
                     addMaintenance(maintenance);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IOException("Ung�ltige Wartung.");
+                throw new IOException("Invalid maintenance");
             }
         }
 
@@ -242,12 +241,14 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
 
 
     public void writeCsv(PrintWriter writer) {
-        writer.println("Datum;Kilometerstand;Kosten;Währung");
+        writer.println("Datum;Kilometerstand;Kosten;Währung;Beschreibung;Notizen");
         for (Maintenance maintenance : maintenances) {
             writer.println(formatDate(maintenance.getDate()) + ";" +
                     maintenance.getMileage() + ";" +
                     maintenance.getCosts() + ";" +
-                    formatCurrency(maintenance.getCurrency()));
+                    formatCurrency(maintenance.getCurrency()) + ";" +
+                    maintenance.getTitle() + ";" +
+                    maintenance.getNote());
         }
     }
 
