@@ -245,8 +245,8 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
         writer.println("Datum;Kilometerstand;Kosten;Währung");
         for (Maintenance maintenance : maintenances) {
             writer.println(formatDate(maintenance.getDate()) + ";" +
-                    maintenance.getCosts() + ";" +
                     maintenance.getMileage() + ";" +
+                    maintenance.getCosts() + ";" +
                     formatCurrency(maintenance.getCurrency()));
         }
     }
