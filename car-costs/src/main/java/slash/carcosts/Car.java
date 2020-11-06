@@ -370,35 +370,32 @@ public class Car {
     /**
      * Write Amiga CarCosts format.
      */
-    public void write(File file) throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        BufferedWriter buffWriter = new BufferedWriter(fileWriter);
+    public void writeAmigaCarCosts(File file) throws IOException {
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        writer.println("#");
+        writer.println("01-Jan-80 0 0 0");
+        writer.println(sign.getValue() + "," + name.getValue() + "," + currency.getValue().getName());
+        writer.println("#");
 
-        buffWriter.write("#", 0, 1);
-        buffWriter.newLine();
+        fuel.writeAmigaCarCosts(writer);
 
-        String firstLine = "01-Jan-80 0 0 0"; // dummy for Amiga program
-        buffWriter.write(firstLine, 0, firstLine.length());
-        buffWriter.newLine();
+        writer.println("#");
 
-        String secondLine = sign.getValue() + "," + name.getValue() + "," + currency.getValue().getName();
-        buffWriter.write(secondLine, 0, secondLine.length());
-        buffWriter.newLine();
+        maintenance.writeAmigaCosts(writer);
 
-        buffWriter.write("#", 0, 1);
-        buffWriter.newLine();
-
-        fuel.write(buffWriter);
-
-        buffWriter.write("#", 0, 1);
-        buffWriter.newLine();
-
-        maintenance.write(buffWriter);
-
-        buffWriter.close();
-        fileWriter.close();
+        writer.close();
 
         save.setState(false);
+    }
+
+    public void writeCsv(File file) throws IOException {
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(new File(file.getAbsolutePath() + "-maintenance.csv"))));
+        maintenance.writeCsv(writer);
+        writer.close();
+
+        writer = new PrintWriter(new BufferedWriter(new FileWriter(new File(file.getAbsolutePath() + "-fuel.csv"))));
+        fuel.writeCsv(writer);
+        writer.close();
     }
 
 
@@ -413,7 +410,7 @@ public class Car {
 
     public class ModelUpdater implements ListDataListener, ChangeListener {
         public void contentsChanged(ListDataEvent e) {
-           // intentionally left empty to avoid "changed" state just by opening a view
+            updateModels();
         }
 
         public void intervalAdded(ListDataEvent e) {

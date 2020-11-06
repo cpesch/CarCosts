@@ -68,8 +68,6 @@ public class MaintenanceView extends ManagedJPanel {
         JTextField mileage = new JTextField();
         mileage.setDocument(adapMileage);
 
-        System.out.println("IMaintenance:" + maintenance);
-
         StringModel dbTitle = maintenance.getTitleModel();
         StringModelToBoundedDocumentAdapter adapTitle = new
                 StringModelToBoundedDocumentAdapter(dbTitle, 30);
@@ -260,8 +258,6 @@ public class MaintenanceView extends ManagedJPanel {
          * @param ae the action event
          */
         public void actionPerformed(ActionEvent ae) {
-            System.out.println("+Maintenance:" + maintenance);
-
             MaintenanceCosts costs = car.getMaintenanceCosts();
             if (!costs.existsMaintenance(maintenance))
                 costs.addMaintenance(maintenance);
@@ -291,7 +287,6 @@ public class MaintenanceView extends ManagedJPanel {
          */
         public void actionPerformed(ActionEvent ae) {
             maintenance.setMaintenance(original);
-            System.out.println("-Maintenance:" + maintenance);
 
             closeWindow();
         }

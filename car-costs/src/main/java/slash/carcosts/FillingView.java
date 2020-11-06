@@ -70,8 +70,6 @@ public class FillingView extends ManagedJPanel {
         JTextField mileage = new JTextField();
         mileage.setDocument(adapMileage);
 
-        System.out.println("IFilling:" + filling);
-
         DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(Locale.GERMAN);
         decimalFormat.applyPattern("###,##0.00");
 
@@ -252,8 +250,6 @@ public class FillingView extends ManagedJPanel {
          * @param ae the action event
          */
         public void actionPerformed(ActionEvent ae) {
-            System.out.println("+Filling:" + filling);
-
             FuelCosts costs = car.getFuelCosts();
             if (!costs.existsFilling(filling))
                 costs.addFilling(filling);
@@ -283,7 +279,6 @@ public class FillingView extends ManagedJPanel {
          */
         public void actionPerformed(ActionEvent ae) {
             filling.setFilling(original);
-            System.out.println("-Filling:" + filling);
 
             closeWindow();
         }

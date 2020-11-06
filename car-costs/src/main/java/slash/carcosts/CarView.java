@@ -754,7 +754,8 @@ public class CarView extends ManagedJPanel {
             return;
 
         try {
-            car.write(file);
+            car.writeCsv(file);
+            car.writeAmigaCarCosts(file);
             setCar(file, car);
         } catch (IOException e) {
             e.printStackTrace();

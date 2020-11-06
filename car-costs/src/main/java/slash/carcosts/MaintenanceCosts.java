@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -229,29 +230,24 @@ public class MaintenanceCosts extends AbstractListModel implements ListModel {
         fireIntervalAdded(this, 0, getSize());
     }
 
-    private void writeMaintenance(BufferedWriter writer, Maintenance maintenance) throws IOException {
-        String line = formatDate(maintenance.getDate()) + " 0 " +
-                maintenance.getCosts() + " " +
-                maintenance.getMileage() + " " +
-                formatCurrency(maintenance.getCurrency());
-        writer.write(line, 0, line.length());
-        writer.newLine();
-
-        line = maintenance.getTitle();
-        writer.write(line, 0, line.length());
-        writer.newLine();
-
-        line = maintenance.getNote();
-        writer.write(line, 0, line.length());
-        writer.newLine();
+    public void writeAmigaCosts(PrintWriter writer) {
+        for (Maintenance maintenance : maintenances) {
+            writer.println(formatDate(maintenance.getDate()) + " 0 " +
+                    maintenance.getCosts() + " " +
+                    maintenance.getMileage() + " " +
+                    formatCurrency(maintenance.getCurrency()));
+            writer.println(maintenance.getTitle());
+            writer.println(maintenance.getNote());        }
     }
 
-    /**
-     * Write in Amiga CarCosts format.
-     */
-    public void write(BufferedWriter writer) throws IOException {
+
+    public void writeCsv(PrintWriter writer) {
+        writer.println("Datum;Kilometerstand;Kosten;Währung");
         for (Maintenance maintenance : maintenances) {
-            writeMaintenance(writer, maintenance);
+            writer.println(formatDate(maintenance.getDate()) + ";" +
+                    maintenance.getCosts() + ";" +
+                    maintenance.getMileage() + ";" +
+                    formatCurrency(maintenance.getCurrency()));
         }
     }
 

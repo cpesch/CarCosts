@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -233,30 +234,31 @@ public class FuelCosts extends AbstractListModel implements ListModel {
                 addFilling(filling);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new IOException("Ung�ltige Tankung.");
+                throw new IOException("Invalid filling");
             }
         }
 
         fireIntervalAdded(this, 0, getSize());
     }
 
-    private void writeFilling(BufferedWriter writer, Filling filling) throws IOException {
-        String line = formatDate(filling.getDate()) + " 0 " +
-                filling.getMileage() + " " +
-                filling.getQuantity() + " " +
-                filling.getCosts() + " " +
-                formatCurrency(filling.getCurrency());
-        writer.write(line, 0, line.length());
-        writer.newLine();
+    public void writeAmigaCarCosts(PrintWriter writer) {
+        for (Filling filling : fillings) {
+            writer.println(formatDate(filling.getDate()) + " 0 " +
+                    filling.getMileage() + " " +
+                    filling.getQuantity() + " " +
+                    filling.getCosts() + " " +
+                    formatCurrency(filling.getCurrency()));
+        }
     }
 
-    /**
-     * Write in Amiga CarCosts format.
-     * @param writer where to write to
-     */
-    public void write(BufferedWriter writer) throws IOException {
+    public void writeCsv(PrintWriter writer) {
+        writer.println("Datum;Kilometerstand;Menge;Kosten;Währung");
         for (Filling filling : fillings) {
-            writeFilling(writer, filling);
+            writer.println(formatDate(filling.getDate()) + ";" +
+                    filling.getMileage() + ";" +
+                    filling.getQuantity() + ";" +
+                    filling.getCosts() + ";" +
+                    formatCurrency(filling.getCurrency()));
         }
     }
 

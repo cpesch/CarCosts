@@ -80,7 +80,7 @@ public class KeyStrokeManager implements KeyListener {
      * This event occurs when a key press is followed by a key release.
      */
     public void keyTyped(KeyEvent e) {
-        System.out.println("KeyTyped:" + e);
+        // System.out.println("KeyTyped:" + e);
         processComponentKeyEvent(e);
     }
 
